@@ -1,10 +1,8 @@
 #!/bin/bash
 #
-# Ceilometer Collector monitoring script
+# Ceilometer Alarm Notifier monitoring script
 #
-# Copyright © 2013 eNovance <licensing@enovance.com>
-#
-# Author: Emilien Macchi <emilien.macchi@enovance.com>
+# Author: Swann Croiset
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,16 +27,19 @@ STATE_UNKNOWN=3
 STATE_DEPENDENT=4
 
 
-PID=$(pidof -x ceilometer-collector)
+PID=$(pidof -x ceilometer-alarm-notifier)
 if [ -z $PID ]; then
-	PID=$(ps auxf|grep ceilometer-collector|grep python | awk '{print $2}')
+	PID=$(ps auxf|grep ceilometer-alarm-notifier|grep python | awk '{print $2}')
 fi
+# ceilometer-alarm-notifier
 
 AMQP_PORT=$(grep amqp /etc/services|head -n 1|cut -f 1 -d '/'| awk '{print $2}')
 if ! KEY=$(netstat -nepta 2>/dev/null | grep $PID 2>/dev/null | grep ":$AMQP_PORT") || test -z "$PID"
 then
-    echo "Ceilometer Collector is not connected to AMQP."
+    echo "Ceilometer Alarm evaluator is not connected to AMQP."
     exit $STATE_CRITICAL
 fi
 
-echo "Ceilometer Collector is working."
+echo "Ceilometer Alarm evaluator is working."
+
+

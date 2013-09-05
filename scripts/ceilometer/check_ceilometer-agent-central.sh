@@ -30,6 +30,9 @@ STATE_DEPENDENT=4
 
 
 PID=$(pidof -x ceilometer-agent-central)
+if [ -z $PID ]; then
+	PID=$(ps auxf|grep ceilometer-agent-central|grep python | awk '{print $2}')
+fi
 
 AMQP_PORT=$(grep amqp /etc/services|head -n 1|cut -f 1 -d '/'| awk '{print $2}')
 if ! KEY=$(netstat -nepta 2>/dev/null | grep $PID 2>/dev/null | grep ":$AMQP_PORT") || test -z "$PID"
