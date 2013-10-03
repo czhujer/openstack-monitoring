@@ -27,7 +27,7 @@ STATE_UNKNOWN=3
 STATE_DEPENDENT=4
 
 
-PID=$( ps -ef | grep ceilometer-alarm-singleton | grep python | awk {'print$2'} | tail -n 1)
+PID=$( ps -ef | grep ceilometer-alarm-evaluator| grep python | awk {'print$2'} | tail -n 1)
 
 if [ -z $PID ];
 then
